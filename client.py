@@ -1,4 +1,5 @@
-from imutils.video import VideoStream
+from videostream import VideoStream
+import sys
 import socket
 import requests
 import time
@@ -54,6 +55,11 @@ rpiName = socket.gethostname()
 
 with open("ips.txt", "r") as readFile:
 	readFileData = readFile.read()
+
+logs = open(logs.txt, "a")
+sys.stdout = logs
+sys.stderr = logs
+
 
 cameraIPs = [x for x in readFileData.split("\n") if x != ""]
 videoStreams = [VideoStream(src=y).start() for y in cameraIPs]
