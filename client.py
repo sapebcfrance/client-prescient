@@ -56,7 +56,7 @@ rpiName = socket.gethostname()
 with open("ips.txt", "r") as readFile:
 	readFileData = readFile.read()
 
-logs = open(logs.txt, "a")
+logs = open("logs.txt", "a")
 sys.stdout = logs
 sys.stderr = logs
 
