@@ -1,1 +1,1 @@
-python3 client.py
+python3 client.py 2>/dev/null
