@@ -1,7 +1,6 @@
 from videostream import VideoStream
 import sys
 import socket
-import requests
 import time
 import struct
 import gzip
@@ -9,19 +8,22 @@ import imutils
 import cv2
 import numpy as np
 
+import asyncio
+import websockets
+
 
 class Pack:
 	def __init__(self):
 		self.content = []
 
 	def add(self, frame):
-		self.content.append(cv2.resize(frame, (720, 480)))
+		self.content.append(frame)
 
 	def generate(self):
 		data = b""
 
 		for frame in self.content:
-			fby = cv2.imencode(".jpg", frame)[1].tostring()
+			fby = cv2.imencode(".png", frame)[1].tostring()
 			lencompf = struct.pack("l", len(fby))
 
 			data += lencompf + fby
@@ -39,12 +41,13 @@ class Pack:
 		lendata = len(data)
 
 		while i <= lendata:
-			if len(data[i:i+4]) == 0:
+			if len(data[i:i+8]) == 0:
 				break
 
-			lenframe = struct.unpack("l", data[i:i+4])[0]  # struct L length
-			frames.append(cv2.imdecode(np.fromstring(data[i+4:i+4+lenframe], np.uint8), cv2.IMREAD_COLOR))
-			i += 4 + lenframe
+			lenframe = struct.unpack("l", data[i:i+8])[0]  # struct L length
+			print(lenframe)
+			frames.append(cv2.imdecode(np.fromstring(data[i+8:i+8+lenframe], np.uint8), cv2.IMREAD_COLOR))
+			i += 8 + lenframe
 
 		return frames
 
@@ -69,13 +72,19 @@ videoStreams = [VideoStream(src=y).start() for y in cameraIPs]
 
 time.sleep(2.0)
 
-with requests.session() as session:
-	while True:
-		pack = Pack()
+async def flux():
+    uri = "wss://prescient2.cfapps.eu10.hana.ondemand.com/ws"
+    async with websockets.connect(uri) as websocket:
+        while True:
+        
+            pack = Pack()
+            for vs in videoStreams:
+                pack.add(vs.read())
+        
+            await websocket.send(pack.generate())
+            print("Pack sent !")
 
-		for vs in videoStreams:
-			pack.add(vs.read())
+            greeting = await websocket.recv()
+            print(f"< {greeting}")
 
-		session.post("https://prescient.cfapps.eu10.hana.ondemand.com/pack", data=pack.generate())
-		
-		time.sleep(0.25)
+asyncio.get_event_loop().run_until_complete(flux())
