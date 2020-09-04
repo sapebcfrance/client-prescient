@@ -60,8 +60,8 @@ with open("ips.txt", "r") as readFile:
 	readFileData = readFile.read()
 
 logs = open("logs.txt", "a")
-sys.stdout = logs
-sys.stderr = logs
+#sys.stdout = logs
+#sys.stderr = logs
 
 
 cameraIPs = [x for x in readFileData.split("\n") if x != ""]
