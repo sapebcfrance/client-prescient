@@ -74,7 +74,7 @@ time.sleep(2.0)
 
 async def flux():
     uri = "wss://prescient2.cfapps.eu10.hana.ondemand.com/ws"
-    async with websockets.connect(uri, max_size=2**30) as websocket:
+    async with websockets.connect(uri, max_size=2**30, close_timeout=30) as websocket:
         while True:
         
             pack = Pack()
