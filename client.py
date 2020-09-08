@@ -23,7 +23,7 @@ class Pack:
 		data = b""
 
 		for frame in self.content:
-			fby = cv2.imencode(".jpg", frame)[1].tostring()
+			fby = np.frombuffer(cv2.imencode(".jpg", frame)[1], dtype=np.uint8).tobytes()
 			lencompf = struct.pack("l", len(fby))
 
 			data += lencompf + fby
