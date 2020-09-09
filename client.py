@@ -19,36 +19,14 @@ rpiName = socket.gethostname()
 with open("ips.txt", "r") as readFile:
 	readFileData = readFile.read()
 
-logs = open("logs.txt", "a")
-#sys.stdout = logs
-#sys.stderr = logs
+sys.stdout = open("logs.txt", "a")
 
 
 cameraIPs = [x for x in readFileData.split("\n") if x != ""]
 videoStreams = [VideoStream(src=y).start() for y in cameraIPs]
 
-# Si resolution plus basse ajouter , resolution=(320, 240)
-# vs = VideoStream(usePiCamera=True).start()
 
-asyncio.sleep(2.0)
-
-
-async def flux():
-	uri = "wss://prescient2.cfapps.eu10.hana.ondemand.com/ws"
-	async with websockets.connect(uri, max_size=2**30, close_timeout=30) as websocket:
-		while True:
-
-			pack = Pack()
-			for vs in videoStreams:
-				pack.add(vs.read())
-
-			await websocket.send(pack.generate())
-			print("Pack sent !")
-
-			greeting = await websocket.recv()
-			print(f"< {greeting}")
-
-# asyncio.get_event_loop().run_until_complete(flux())
+await asyncio.sleep(2.0)
 
 
 async def cam0():
