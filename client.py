@@ -12,46 +12,6 @@ import asyncio
 import websockets
 
 
-class Pack:
-	def __init__(self):
-		self.content = []
-
-	def add(self, frame):
-		self.content.append(frame)
-
-	def generate(self):
-		data = b""
-
-		for frame in self.content:
-			fby = np.frombuffer(cv2.imencode(".jpg", frame)[1], dtype=np.uint8).tobytes()
-			lencompf = struct.pack("l", len(fby))
-
-			data += lencompf + fby
-
-		data = gzip.compress(data)
-		print("TOTAL : " + str(len(data)))
-		return data
-
-	@staticmethod
-	def retrieve(data):
-		frames = []
-		i = 0
-
-		data = gzip.decompress(data)
-		lendata = len(data)
-
-		while i <= lendata:
-			if len(data[i:i+8]) == 0:
-				break
-
-			lenframe = struct.unpack("l", data[i:i+8])[0]  # struct L length
-			print(lenframe)
-			frames.append(cv2.imdecode(np.fromstring(data[i+8:i+8+lenframe], np.uint8), cv2.IMREAD_COLOR))
-			i += 8 + lenframe
-
-		return frames
-
-
 # rtsp://admin:sapebc@192.168.3.194:554//h264Preview_01_main
 
 rpiName = socket.gethostname()
@@ -70,7 +30,7 @@ videoStreams = [VideoStream(src=y).start() for y in cameraIPs]
 # Si resolution plus basse ajouter , resolution=(320, 240)
 # vs = VideoStream(usePiCamera=True).start()
 
-time.sleep(2.0)
+asyncio.sleep(2.0)
 
 
 async def flux():
