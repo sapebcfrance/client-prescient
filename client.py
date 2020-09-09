@@ -26,7 +26,7 @@ cameraIPs = [x for x in readFileData.split("\n") if x != ""]
 videoStreams = [VideoStream(src=y).start() for y in cameraIPs]
 
 
-await asyncio.sleep(2.0)
+asyncio.sleep(2.0)
 
 
 async def cam0():
