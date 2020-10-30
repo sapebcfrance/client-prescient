@@ -8,11 +8,11 @@ import subprocess as sub
 from threading import Thread
 
 PY_FILE = "client.py"
-PY_PATH = os.path.join(os.getcwd(), PY_FILE)
+PY_PATH = os.path.join("usr/local/bin/client-prescient", PY_FILE)
 LOG_FILE2 = "log.log"
-LOG_FILE = os.path.join(os.getcwd(), LOG_FILE2)
+LOG_FILE = os.path.join("usr/local/bin/client-prescient", LOG_FILE2)
 
-PAUSE = 5
+PAUSE = 8
 
 SERVER_URL_GET = "http://prescient.cfapps.eu10.hana.ondemand.com/statecam"
 # SERVER_URL_SET = "http://localhost:8000/state/r/"
