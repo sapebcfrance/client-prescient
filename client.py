@@ -14,7 +14,7 @@ import websockets
 
 # Boitier prescient justement
 HASH = "ae6d3daf613bad5033d5ee4d1fd6b8a999fe61f71d9e8a128571af56e225c396"
-DEBUG = True
+DEBUG = False
 
 
 # rtsp://admin:sapebc@192.168.3.194:554//h264Preview_01_main
