@@ -5,7 +5,6 @@ import socket
 import time
 import struct
 import gzip
-import imutils
 import cv2
 import numpy as np
 
