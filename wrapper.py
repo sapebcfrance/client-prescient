@@ -8,9 +8,9 @@ import subprocess as sub
 from threading import Thread
 
 PY_FILE = "client.py"
-PY_PATH = os.path.join("usr/local/bin/client-prescient", PY_FILE)
+PY_PATH = os.path.join("/usr/local/bin/client-prescient", PY_FILE)
 LOG_FILE2 = "log.log"
-LOG_FILE = os.path.join("usr/local/bin/client-prescient", LOG_FILE2)
+LOG_FILE = os.path.join("/usr/local/bin/client-prescient", LOG_FILE2)
 
 PAUSE = 8
 
